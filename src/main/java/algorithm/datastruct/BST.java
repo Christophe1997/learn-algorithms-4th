@@ -31,7 +31,7 @@ public class BST<Key extends Comparable<Key>, Value> {
 
     private <T> Optional<T> option(Node node, Function<Node, T> f) {
         if (node == null) return Optional.empty();
-        return Optional.of(f.apply(node));
+        return Optional.ofNullable(f.apply(node));
     }
 
     public int size() {
@@ -43,12 +43,14 @@ public class BST<Key extends Comparable<Key>, Value> {
         return node.N;
     }
 
+    public boolean isEmpty() { return root == null; }
+
     private int resize(Node node) {
         return size(node.left) + size(node.right) + 1;
     }
 
     public Optional<Value> get(Key key) {
-        return Optional.of(get(root, key));
+        return Optional.ofNullable(get(root, key));
     }
 
     private Value get(Node node, Key key) {
@@ -175,25 +177,25 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
 
     public void delete(Key key) {
-
+        delete(root, key);
     }
 
-    private Node delete(Node node, Key key) {
-        if (node == null) return null;
-        int cmp = key.compareTo(node.key);
-        if (cmp > 0) node.right = delete(node.right, key);
-        else if (cmp < 0) node.left = delete(node.left, key);
+    private Node delete(Node root, Key key) {
+        if (root == null) return null;
+        int cmp = key.compareTo(root.key);
+        if (cmp > 0) root.right = delete(root.right, key);
+        else if (cmp < 0) root.left = delete(root.left, key);
         else {
-            if (node.nonLeft()) return node.right;
-            if (node.nonRight()) return node.left;
-            Node t = node;
-            node = min(node.right);
-            assert node != null;
-            node.right = deleteMin(node.right);
-            node.left = t.left;
+            if (root.nonLeft()) return root.right;
+            if (root.nonRight()) return root.left;
+            Node tep = root;
+            root = min(tep.right);
+            assert root != null;
+            root.right = deleteMin(tep.right);
+            root.left = tep.left;
         }
-        node.N = resize(node);
-        return node;
+        root.N = resize(root);
+        return root;
     }
 
     public Iterable<Key> keys() {
