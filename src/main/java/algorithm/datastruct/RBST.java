@@ -56,6 +56,7 @@ public class RBST<Key extends Comparable<Key>, Value> {
     }
 
     private boolean isRed(Node node) {
+        if (node == null) return BLACK;
         return node.color == RED;
     }
 
@@ -197,7 +198,9 @@ public class RBST<Key extends Comparable<Key>, Value> {
             if (minNode.nonRight()) current = nil;
             else current = minNode.right;
             current.parent = minNode.parent;
-            minNode.parent.left = current;
+            if (minNode == minNode.parent.left) { minNode.parent.left = current; }
+            else { minNode.parent.right = current; }
+            if (this.root == minNode) { this.root = current; }
             deleteFixUp(current);
             return Optional.of(minNode);
         }
@@ -257,6 +260,7 @@ public class RBST<Key extends Comparable<Key>, Value> {
             }
         }
         current.color = BLACK;
+        nil.parent = null;
     }
 
     public void delete(Key key) {
@@ -264,37 +268,52 @@ public class RBST<Key extends Comparable<Key>, Value> {
         if (optionalNode.isPresent()) {
             Node deleteNode = optionalNode.get();
             Node parent = deleteNode.parent;
-            if (parent == nil) {
-                this.root = nil;
-                return;
-            }
             Optional<Node> optionalTempNode = min(deleteNode.right);
             if (optionalTempNode.isPresent()) {
                 Node tempNode = optionalTempNode.get();
+                if (this.root == deleteNode) { this.root = tempNode; }
                 flipNode(deleteNode, tempNode);
                 deleteMin(tempNode.right);
+            } else {
+                Node current = deleteNode.left;
+                if (this.root == deleteNode) { this.root = current; }
+                current.parent = parent;
+                if (deleteNode == parent.left) parent.left = current;
+                else parent.right = current;
+                deleteFixUp(current);
             }
-            Node current = deleteNode.left;
-            current.parent = parent;
-            if (deleteNode == parent.left) parent.left = current;
-            else parent.right = current;
-            deleteFixUp(current);
         }
+    }
+
+    private void resetNil() {
+        nil.parent = null;
+        nil.left = null;
+        nil.right = null;
     }
 
     private void flipNode(Node lnode, Node rnode) {
         Node tep;
+        if (lnode == lnode.parent.left) { lnode.parent.left = rnode; }
+        else { lnode.parent.right = rnode; }
+        if (rnode == rnode.parent.left) { rnode.parent.left = lnode; }
+        else { rnode.parent.right = lnode; }
         tep = lnode.parent;
         lnode.parent = rnode.parent;
         rnode.parent = tep;
 
         tep = lnode.left;
         lnode.left = rnode.left;
+        rnode.left.parent = lnode;
         rnode.left = tep;
+        tep.parent = rnode;
 
         tep = lnode.right;
         lnode.right = rnode.right;
+        rnode.right.parent = lnode;
         rnode.right = tep;
+        tep.parent = rnode;
+
+        resetNil();
     }
 
 
@@ -305,6 +324,7 @@ public class RBST<Key extends Comparable<Key>, Value> {
         RBMap.insert("c", "d");
         RBMap.insert("d", "h");
         System.out.println("\n" + RBMap.get("a"));
+        RBMap.delete("b");
         RBMap.keys().forEach(System.out::print);
     }
 }
