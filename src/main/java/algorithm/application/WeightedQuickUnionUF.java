@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.application;
 
 import algorithm.std.StdIn;
 

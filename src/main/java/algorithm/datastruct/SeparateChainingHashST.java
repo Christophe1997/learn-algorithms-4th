@@ -6,7 +6,7 @@ public class SeparateChainingHashST<Key, Value> {
     private int N;
     private int M;
     private SequentialSearchST<Key, Value> [] st;
-    public SeparateChainingHashST() { this(997); }
+    public SeparateChainingHashST() { this(996); }
 
     @SuppressWarnings("unchecked")
     public SeparateChainingHashST(int M) {
@@ -21,8 +21,14 @@ public class SeparateChainingHashST<Key, Value> {
 
     public Optional<Value> get(Key key) { return st[hash(key)].get(key); }
 
+    public boolean contains(Key key) { return get(key).isPresent(); }
+
     public SeparateChainingHashST<Key, Value> put(Key key, Value val) {
         st[hash(key)].put(key, val);
         return this;
+    }
+
+    public void delete(Key key) {
+        st[hash(key)].delete(key);
     }
 }

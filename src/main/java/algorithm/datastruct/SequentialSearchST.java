@@ -32,4 +32,18 @@ public class SequentialSearchST<Key, Value> {
         }
         first = new Node(key, val, first);
     }
+    public void delete(Key key) {
+        Node parent = first;
+        for (Node current = first; current != null; current = current.next) {
+            if (key.equals(current.key)) {
+                if (current == first) {
+                    first = current.next;
+                } else {
+                    parent.next = current.next;
+                }
+                return;
+            }
+            parent = current;
+        }
+    }
 }
