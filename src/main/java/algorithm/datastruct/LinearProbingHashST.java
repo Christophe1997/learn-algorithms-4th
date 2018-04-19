@@ -1,5 +1,6 @@
 package algorithm.datastruct;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 public class LinearProbingHashST<Key, Value> {
@@ -76,5 +77,13 @@ public class LinearProbingHashST<Key, Value> {
             }
             if (N > 0 && N < M/8) resize(M / 2);
         });
+    }
+
+    public Iterable<Key> keys() {
+        Queue<Key> queue = new Queue<>();
+        for (Key key : keys) {
+            if (key != null) { queue.enqueue(key); }
+        }
+        return queue;
     }
 }

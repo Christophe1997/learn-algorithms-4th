@@ -8,8 +8,8 @@ import java.util.Scanner;
 
 public class LookupCSV {
     public static void main(String[] args) throws FileNotFoundException {
-        File csv = new File(args[0]);
-        Scanner in = new Scanner(csv);
+        File data = new File(args[0]);
+        Scanner in = new Scanner(data);
         Scanner stdIn = new Scanner(System.in);
         int keyField = Integer.parseInt(args[1]);
         int valueField = Integer.parseInt(args[2]);
@@ -23,7 +23,7 @@ public class LookupCSV {
         while (stdIn.hasNext()) {
             String query = stdIn.next();
             System.out.println(hashST.get(query).orElse("Not found"));
-            System.out.println("anything else?");
+            System.out.println("Anything else?");
         }
     }
 }
