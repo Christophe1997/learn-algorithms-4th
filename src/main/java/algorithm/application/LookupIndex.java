@@ -28,9 +28,9 @@ public class LookupIndex {
         }
         Scanner stdIn = new Scanner(System.in);
         System.out.println("What are you querying for?");
-        while (stdIn.hasNext()) {
+        while (stdIn.hasNextLine()) {
             Consumer<? super String> print = x -> System.out.println(" " + x);
-            String queue = stdIn.next();
+            String queue = stdIn.nextLine();
             st.get(queue).ifPresent(q -> q.forEach(print));
             ts.get(queue).ifPresent(q -> q.forEach(print));
             System.out.println("anything else?");

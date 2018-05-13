@@ -2,6 +2,9 @@ package algorithm.datastruct;
 
 
 import algorithm.std.StdIn;
+import jdk.nashorn.internal.ir.Optimistic;
+
+import java.util.Optional;
 
 public class IndexMinPQ<Key extends Comparable<Key>> {
 
@@ -9,6 +12,17 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
     private int[] qp;
     private Key[] keys;
     private int N = 0;
+
+    public IndexMinPQ(int max) {
+        pq = new int[max + 1];
+        qp = new int[max + 1];
+        keys = cast(new Comparable[max + 1]);
+        for (int elem : qp) elem = -1;
+    }
+
+    public IndexMinPQ() {
+        this(4);
+    }
 
     @SuppressWarnings("unchecked")
     private Key[] cast(Object obj) {
@@ -25,6 +39,16 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
         pq[j] = t;
         qp[pq[i]] = i;
         qp[pq[j]] = j;
+    }
+
+    private void resize(int size) {
+        IndexMinPQ<Key> tep = new IndexMinPQ<>(size);
+        System.arraycopy(pq, 0, tep.pq, 0, N);
+        System.arraycopy(qp, 0, tep.qp, 0, N);
+        System.arraycopy(keys, 0, tep.keys, 0, N);
+        pq = tep.pq;
+        qp = tep.qp;
+        keys = tep.keys;
     }
 
     private void swim(int k) {
@@ -44,14 +68,12 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
         }
     }
 
-    public IndexMinPQ(int max) {
-        pq = new int[max + 1];
-        qp = new int[max + 1];
-        keys = cast(new Comparable[max + 1]);
-        for (int elem : qp) elem = -1;
+    public Optional<Key> keyOf(int i) {
+        return Optional.ofNullable(keys[i]);
     }
 
     public void insert(int k, Key key) {
+        if (N > pq.length - 1) { resize(pq.length * 2);}
         N++;
         qp[k] = N;
         pq[N] = k;
@@ -76,6 +98,7 @@ public class IndexMinPQ<Key extends Comparable<Key>> {
         sink(index);
         keys[k] = null;
         qp[k] = -1;
+        if (N < pq.length / 2) { resize(pq.length / 2); }
     }
 
     public Key min() {

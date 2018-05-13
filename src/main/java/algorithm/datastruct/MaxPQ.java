@@ -53,9 +53,6 @@ public class MaxPQ<Key extends Comparable<Key>> {
         pq = cast(new Comparable[max + 1]);
     }
 
-    public MaxPQ(Key[] a) {
-    }
-
     public void insert(Key v) {
         if (N >= pq.length - 1) resize(pq.length * 2);
         pq[++N] = v;

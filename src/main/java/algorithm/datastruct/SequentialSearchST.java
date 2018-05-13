@@ -46,4 +46,12 @@ public class SequentialSearchST<Key, Value> {
             parent = current;
         }
     }
+
+    public Iterable<Key> keys() {
+        Queue<Key> queue = new Queue<>();
+        for (Node tep = first; tep != null; tep = tep.next) {
+            queue.enqueue(tep.key);
+        }
+        return queue;
+    }
 }

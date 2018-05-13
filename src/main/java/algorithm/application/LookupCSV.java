@@ -20,8 +20,8 @@ public class LookupCSV {
             hashST.put(tokens[keyField], tokens[valueField]);
         }
         System.out.println("What are you querying for?");
-        while (stdIn.hasNext()) {
-            String query = stdIn.next();
+        while (stdIn.hasNextLine()) {
+            String query = stdIn.nextLine();
             System.out.println(hashST.get(query).orElse("Not found"));
             System.out.println("Anything else?");
         }

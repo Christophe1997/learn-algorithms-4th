@@ -21,8 +21,8 @@ public class FileIndex {
         }
         Scanner stdIn = new Scanner(System.in);
         System.out.println("What are you querying for?");
-        while (stdIn.hasNext()) {
-            String query = stdIn.next();
+        while (stdIn.hasNextLine()) {
+            String query = stdIn.nextLine();
             st.get(query).ifPresent(fileSET ->
                     fileSET.keys().forEach(file -> System.out.println(" " + file.getName())));
             System.out.println("Anything else?");

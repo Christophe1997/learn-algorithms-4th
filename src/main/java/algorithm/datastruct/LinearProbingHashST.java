@@ -79,6 +79,8 @@ public class LinearProbingHashST<Key, Value> {
         });
     }
 
+    public int size() { return N; }
+
     public Iterable<Key> keys() {
         Queue<Key> queue = new Queue<>();
         for (Key key : keys) {
